@@ -39,5 +39,6 @@ def generate_answer(
         max_tokens=512,
         system=SYSTEM_PROMPT,
         messages=[{"role": "user", "content": build_prompt(question, chunks)}],
+        thinking={"type": "disabled"},
     )
-    return response.content[0].text
+    return next(block.text for block in response.content if block.type == "text")

@@ -78,6 +78,7 @@ def judge_answer(
         tools=[JUDGE_TOOL],
         tool_choice={"type": "tool", "name": "submit_judgment"},
         messages=[{"role": "user", "content": prompt}],
+        thinking={"type": "disabled"},
     )
     for block in response.content:
         if block.type == "tool_use":
