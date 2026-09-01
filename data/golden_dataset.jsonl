@@ -1,0 +1,7 @@
+{"id": "q1", "question": "How many devices can I sync to on the Free plan?", "expected_answer": "2 devices."}
+{"id": "q2", "question": "Does Nimbus Notes have end-to-end encryption on the Free plan?", "expected_answer": "Yes, encryption is on by default on both Free and Pro plans."}
+{"id": "q3", "question": "How much does the Pro plan cost per year?", "expected_answer": "$60 per year."}
+{"id": "q4", "question": "Can I get phone support as a Pro user?", "expected_answer": "No, Nimbus Notes does not offer phone support on any plan."}
+{"id": "q5", "question": "What happens if I forget my password?", "expected_answer": "Notes cannot be recovered because Nimbus Notes has no access to your encryption key; you should use your recovery phrase."}
+{"id": "q6", "question": "Can I use Nimbus Notes without an internet connection?", "expected_answer": "Yes, previously opened notes are cached locally and editable offline, syncing once back online."}
+{"id": "q7", "question": "What is the maximum weight capacity of a Nimbus Notes desk?", "expected_answer": "I don't know based on the provided context — Nimbus Notes is a note-taking app and the corpus contains no information about desks."}
