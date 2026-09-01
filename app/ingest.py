@@ -1,3 +1,4 @@
+import pickle
 from pathlib import Path
 
 CHUNK_SIZE = 500
@@ -18,14 +19,8 @@ def chunk_text(text: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUNK_OVE
         if current and len(current) + len(para) + 2 > chunk_size:
             chunks.append(current)
             current = (current[-overlap:] + "\n\n" + para) if overlap else para
-        elif not current:
-            current = para
-        elif len(para) < chunk_size * 0.1:
-            # Small paragraph: keep separate unless current is substantial
-            chunks.append(current)
-            current = para
         else:
-            current = f"{current}\n\n{para}"
+            current = f"{current}\n\n{para}" if current else para
     if current:
         chunks.append(current)
     return chunks
@@ -48,8 +43,6 @@ def get_embedder():
 
 
 def ingest(corpus_dir: Path = CORPUS_DIR, chroma_dir: Path = CHROMA_DIR) -> int:
-    import pickle
-
     import chromadb
     from rank_bm25 import BM25Okapi
 

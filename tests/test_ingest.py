@@ -33,14 +33,14 @@ def test_load_corpus_reads_md_and_txt(tmp_path):
 def test_ingest_builds_chroma_and_bm25_index(tmp_path):
     corpus_dir = tmp_path / "corpus"
     corpus_dir.mkdir()
-    (corpus_dir / "doc1.md").write_text(
-        "The sky is blue during the day.\n\nWater boils at 100 degrees Celsius.",
-        encoding="utf-8",
-    )
-    (corpus_dir / "doc2.md").write_text(
-        "Cats are mammals.\n\nThe ocean covers most of the Earth's surface.",
-        encoding="utf-8",
-    )
+    # Paragraphs are long enough that each doc's two paragraphs don't fit in one
+    # 500-char chunk, so chunk_text's overflow branch splits them into 2 chunks each.
+    para_a = "The sky is blue during the day. " * 9
+    para_b = "Water boils at 100 degrees Celsius. " * 9
+    (corpus_dir / "doc1.md").write_text(f"{para_a}\n\n{para_b}", encoding="utf-8")
+    para_c = "Cats are mammals that sleep most of the day. " * 8
+    para_d = "The ocean covers most of the Earth's surface. " * 8
+    (corpus_dir / "doc2.md").write_text(f"{para_c}\n\n{para_d}", encoding="utf-8")
     chroma_dir = tmp_path / "chroma_db"
 
     count = ingest(corpus_dir=corpus_dir, chroma_dir=chroma_dir)
