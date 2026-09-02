@@ -1,0 +1,374 @@
+{
+  "summary": {
+    "n_items": 12,
+    "hallucination_rate": 0.0,
+    "mean_faithfulness": 0.9833333333333334,
+    "mean_correctness": 0.6083333333333333,
+    "mean_retrieval_quality": 0.6916666666666668,
+    "correctness_by_category": {
+      "factual": 0.41,
+      "multi-hop": 0.575,
+      "versioned": 1.0,
+      "edge_case": 0.825,
+      "out_of_scope": 0.725
+    },
+    "pass_rate": 0.4166666666666667,
+    "failed_questions": [
+      "How do I share a database connection across multiple path operations in FastAPI?",
+      "What's the difference between using a function versus a class as a dependency?",
+      "I want to run some code before my app starts and clean up after it shuts down, and also require an API key on some routes. How do I combine startup/shutdown logic with a dependency that checks the API key?",
+      "Can a dependency depend on another dependency in FastAPI?",
+      "What's the best way to add rate limiting to a FastAPI endpoint?",
+      "How do I override a dependency during testing in FastAPI?",
+      "What Python version do I need to use type hints with FastAPI?"
+    ]
+  },
+  "items": [
+    {
+      "id": "q1",
+      "question": "How do I share a database connection across multiple path operations in FastAPI?",
+      "category": "factual",
+      "generated_answer": "Based on the context, dependencies are the mechanism for this purpose. The context states that dependencies are useful when you need to \"share database connections\" among other things, like sharing logic or enforcing security/authentication.\n\nThe general approach involves creating a dependency function (like the \"dependable\" function mentioned in the context) that provides the database connection. FastAPI then takes care of:\n\n- Calling your dependency function with the correct parameters\n- Getting the result from that function\n- Assigning that result to the parameter in your path operation function\n\nThis way, you write the shared code (the database connection logic) once, and FastAPI takes care of calling it for your path operations, minimizing code repetition across multiple path operations.\n\nHowever, the provided context does not include a specific code example showing how to implement a database connection dependency, so I don't know the exact implementation details based on the provided context.",
+      "expected_answer": "Define a dependency function (e.g. using yield to open and close the connection) and add it as a parameter to each path operation function using Depends(). FastAPI will call it automatically for each request.",
+      "sources": [
+        "path_params.md",
+        "query_params.md",
+        "dependencies.md",
+        "dependencies.md"
+      ],
+      "expected_sources": [
+        "tutorial/dependencies/index.md"
+      ],
+      "faithfulness": {
+        "score": 1.0,
+        "justification": "All claims in the answer are directly drawn from the retrieved dependencies.md excerpts (sharing database connections, dependency function calling, shared code once). The answer explicitly flags that it lacks a specific code example rather than inventing one, so nothing is hallucinated."
+      },
+      "correctness": {
+        "score": 0.5,
+        "justification": "The answer correctly identifies dependencies as the mechanism and explains the general FastAPI dependency injection flow, but it misses the key mechanics from the expected answer: using Depends() in the path operation signature and using yield in the dependency function to open/close the connection. It explicitly admits it doesn't know the exact implementation, so it's only partially aligned with the expected answer's specificity."
+      },
+      "retrieval_quality": {
+        "score": 0.4,
+        "justification": "The dependencies.md chunks retrieved are relevant and from the correct general topic area, but the expected source is specifically tutorial/dependencies/index.md, and the retrieved chunks lack the crucial content about Depends() and yield for database connections. Two irrelevant chunks (path_params.md, query_params.md) were also retrieved, diluting quality further."
+      },
+      "passed": false
+    },
+    {
+      "id": "q2",
+      "question": "What's the difference between using a function versus a class as a dependency?",
+      "category": "factual",
+      "generated_answer": "Based on the context, the key point is that both functions and classes can serve as dependencies because the essential requirement is that a dependency must be a **\"callable\"** \u2014 anything Python can \"call\" like a function (e.g., `something()` or `something(some_argument, some_keyword_argument=\"foo\")`).\n\nA Python class qualifies as a callable because creating an instance of a class uses the same call syntax as calling a function. For example:\n\n```python\nclass Cat:\n    def __init__(self, name: str):\n        self.name = name\n\nfluffy = Cat(name=\"Mr Fluffy\")\n```\n\nHere, `fluffy` is created by \"calling\" `Cat`, which makes the class a callable.\n\nThe context notes that although dependencies declared as functions are probably the more common approach, that's \"not the only way to declare dependencies.\" It also mentions that FastAPI actually checks that the dependency is \"a 'callable' (function, class or anything else) and the parameters defined\" \u2014 meaning FastAPI doesn't specifically require a function; it just needs something callable with defined parameters.\n\nThe context also hints at a practical advantage of classes over something like a plain dict for holding common parameters: \"editors can't provide a lot of support (like completion) for dicts, because they can't know their keys and value types.\" This suggests classes can offer better editor support compared to other approaches, though the context doesn't go into further detail on additional differences between functions and classes as dependencies.",
+      "expected_answer": "A function dependency is a plain callable that FastAPI executes and injects the return value of. A class dependency lets you use the class's __init__ parameters as the dependency's parameters, and is often preferred when the dependency needs to hold state or configuration, since it's more reusable and readable in editors due to type checking.",
+      "sources": [
+        "classes_as_dependencies.md",
+        "classes_as_dependencies.md",
+        "background_tasks.md",
+        "classes_as_dependencies.md"
+      ],
+      "expected_sources": [
+        "tutorial/dependencies/classes-as-dependencies.md"
+      ],
+      "faithfulness": {
+        "score": 0.95,
+        "justification": "All claims are directly grounded in the retrieved context (callable definition, class instantiation syntax, FastAPI's callable check, and the dict/editor support comment). No outside knowledge is introduced.'"
+      },
+      "correctness": {
+        "score": 0.55,
+        "justification": "The answer correctly explains that both functions and classes qualify as callables and thus can be dependencies, and hints at editor support benefits of classes. However, it misses the key expected point that classes allow using __init__ parameters as dependency parameters and are preferred for holding state/configuration\u2014this nuance is only vaguely gestured at rather than clearly stated."
+      },
+      "retrieval_quality": {
+        "score": 0.75,
+        "justification": "Three of four retrieved chunks are from the correct expected source (classes_as_dependencies.md) and cover the relevant content, but one irrelevant chunk (background_tasks.md) was also retrieved, slightly diluting relevance."
+      },
+      "passed": false
+    },
+    {
+      "id": "q3",
+      "question": "I want to run some code before my app starts and clean up after it shuts down, and also require an API key on some routes. How do I combine startup/shutdown logic with a dependency that checks the API key?",
+      "category": "multi-hop",
+      "generated_answer": "I don't know based on the provided context.\n\nThe context explains how to define startup/shutdown logic using the `lifespan` parameter and a context manager (events.md), and separately discusses background tasks and dependencies (background_tasks.md). However, it does not provide information on how to combine lifespan startup/shutdown logic with a dependency that checks an API key on specific routes.",
+      "expected_answer": "Use a lifespan async context manager (defined with @asynccontextmanager, passed to FastAPI(lifespan=...)) for startup/shutdown logic. Separately, define a dependency function that checks the API key (e.g. via a Header parameter) and add it with Depends() to the specific routes that need it. These are independent mechanisms \u2014 lifespan handles app-level setup/teardown, while Depends() handles per-request logic.",
+      "sources": [
+        "events.md",
+        "events.md",
+        "events.md",
+        "background_tasks.md"
+      ],
+      "expected_sources": [
+        "advanced/events.md",
+        "tutorial/dependencies/index.md"
+      ],
+      "faithfulness": {
+        "score": 1.0,
+        "justification": "The answer only references what is present in the retrieved context (lifespan mechanism and background tasks/dependencies), and honestly states the context lacks information on combining lifespan with an API-key dependency. No unsupported claims are introduced.\u2033},"
+      },
+      "correctness": {
+        "score": 0.25,
+        "justification": "The expected answer explains that lifespan and Depends() are independent mechanisms that can simply be used together \u2014 lifespan for app-level setup, Depends() for per-route API key checks. The generated answer fails to convey this, instead claiming it doesn't know, when in fact enough conceptual information was present (or could be reasoned) to give a partial answer. It misses the key insight that the two features are simply combined by using both independently.\n"
+      },
+      "retrieval_quality": {
+        "score": 0.4,
+        "justification": "Retrieved chunks cover events.md (lifespan) well, matching one expected source, but the dependencies/index.md source (needed for the API key dependency pattern) was not retrieved; background_tasks.md is irrelevant to the question. This results in partial overlap with expected sources."
+      },
+      "passed": false
+    },
+    {
+      "id": "q4",
+      "question": "Is @app.on_event('startup') still the recommended way to run startup code in FastAPI?",
+      "category": "versioned",
+      "generated_answer": "No. According to the context, the recommended way to handle startup and shutdown is using the `lifespan` parameter of the FastAPI app. The alternative event handlers (like `@app.on_event('startup')`) are described as **deprecated**, with a warning that \"If you provide a lifespan parameter, startup and shutdown event handlers will no longer be called. It's all lifespan or all events, not both.\" The context also notes \"You can probably skip this part,\" referring to the alternative events approach.",
+      "expected_answer": "No. on_event is deprecated in favor of the lifespan context manager, which handles both startup and shutdown in a single async function and allows storing state on the app object. New code should use lifespan; on_event still works but should be avoided going forward.",
+      "sources": [
+        "events.md",
+        "events.md",
+        "events.md",
+        "background_tasks.md"
+      ],
+      "expected_sources": [
+        "advanced/events.md"
+      ],
+      "faithfulness": {
+        "score": 1.0,
+        "justification": "All claims (deprecated status, lifespan being recommended, the warning text, 'You can probably skip this part') are directly quoted or closely paraphrased from the retrieved context with no outside information added."
+      },
+      "correctness": {
+        "score": 1.0,
+        "justification": "The answer correctly states that on_event is deprecated and lifespan is the recommended approach, matching the meaning of the expected answer, though it doesn't mention state storage on the app object\u2014a minor omission not central to the question."
+      },
+      "retrieval_quality": {
+        "score": 1.0,
+        "justification": "The retrieved chunks are all from events.md (the expected source), covering the relevant deprecation warning and lifespan recommendation; one irrelevant background_tasks.md chunk is included but doesn't detract from full coverage of the expected source."
+      },
+      "passed": true
+    },
+    {
+      "id": "q5",
+      "question": "If I define both a lifespan function and an on_event('startup') handler on the same app, what happens?",
+      "category": "edge_case",
+      "generated_answer": "Based on the context provided: If you provide a `lifespan` parameter, startup and shutdown event handlers will no longer be called. It's all lifespan or all events, not both.\n\nSo if you define both, only the `lifespan` function would be used, and the `on_event('startup')` handler would not be called.",
+      "expected_answer": "This is a known gotcha: when a lifespan is set, the deprecated startup/shutdown event handlers can silently fail to run, because lifespan and on_event are mutually exclusive under the hood (this is actually Starlette behavior, not explicitly documented by FastAPI). Mixing them is not officially supported and can cause confusing bugs.",
+      "sources": [
+        "events.md",
+        "events.md",
+        "events.md",
+        "events.md"
+      ],
+      "expected_sources": [
+        "advanced/events.md"
+      ],
+      "faithfulness": {
+        "score": 1.0,
+        "justification": "The answer directly quotes and paraphrases the retrieved context ('It's all lifespan or all events, not both') and draws a reasonable direct inference from it without introducing unsupported claims.dc"
+      },
+      "correctness": {
+        "score": 0.85,
+        "justification": "The answer correctly conveys the core meaning that lifespan takes precedence and on_event handlers won't be called, matching the expected answer's gist. It lacks the extra nuance that this is undocumented Starlette behavior and 'unsupported/confusing bug' framing, but the essential practical outcome matches."
+      },
+      "retrieval_quality": {
+        "score": 1.0,
+        "justification": "Retrieved chunks are all from events.md, which matches the expected source, and specifically include the relevant warning text about lifespan vs event handlers."
+      },
+      "passed": true
+    },
+    {
+      "id": "q6",
+      "question": "Can a dependency depend on another dependency in FastAPI?",
+      "category": "factual",
+      "generated_answer": "I don't know based on the provided context.",
+      "expected_answer": "Yes, dependencies can be nested \u2014 a dependency function can itself declare parameters that are dependencies (sub-dependencies), and FastAPI resolves the full chain automatically, only computing shared sub-dependencies once per request by default.",
+      "sources": [
+        "classes_as_dependencies.md",
+        "classes_as_dependencies.md",
+        "dependencies.md",
+        "classes_as_dependencies.md"
+      ],
+      "expected_sources": [
+        "tutorial/dependencies/index.md"
+      ],
+      "faithfulness": {
+        "score": 1.0,
+        "justification": "The answer only states it doesn't know, which is grounded in the fact that the retrieved context does not discuss sub-dependencies; no unsupported claims are made."
+      },
+      "correctness": {
+        "score": 0.0,
+        "justification": "The expected answer clearly states yes, dependencies can be nested, but the generated answer fails to provide this information, missing the core meaning entirely."
+      },
+      "retrieval_quality": {
+        "score": 0.1,
+        "justification": "The retrieved chunks are all about classes as dependencies and basic dependency injection concepts, but none cover sub-dependencies which is the actual expected source (tutorial/dependencies/index.md); essentially no overlap with the relevant content."
+      },
+      "passed": false
+    },
+    {
+      "id": "q7",
+      "question": "How do I run a long email-sending task without making the client wait for the response?",
+      "category": "factual",
+      "generated_answer": "Based on the context, you can use FastAPI's **Background Tasks** feature to achieve this.\n\nHere's how:\n\n1. **Create a function to be run as the background task.** It's a standard function that can receive parameters, and can be either `async def` or normal `def`\u2014FastAPI will know how to handle it correctly. For a task like writing to a file (simulating sending an email), since the write operation doesn't use `async`/`await`, you'd define it with normal `def`.\n\n2. **Declare a parameter of type `BackgroundTasks`** in your path operation function. FastAPI will create the object of type `BackgroundTasks` for you and pass it as that parameter.\n\n3. **Use `.add_task()`** to add your task function to be run in the background. It receives:\n   - A task function to be run in the background (e.g., `write_notification`)\n   - Any sequence of arguments that should be passed to the task function in order (e.g., `email`)\n   - Any keyword arguments that should be passed to the task function (e.g., `message=\"some notification\"`)\n\nExample from the context:\n\n```python\nfrom fastapi import BackgroundTasks, FastAPI\n\napp = FastAPI()\n\n@app.post(\"/send-notification/{email}\")\nasync def send_notification(email: str, background_tasks: BackgroundTasks):\n    background_tasks.add_task(write_notification, email, message=\"some notification\")\n    return {\"message\": \"Notification sent in the background\"}\n```\n\nThis way, the response (\"Notification sent in the background\") is returned to the client immediately, while the actual notification/email-writing task runs afterward in the background\u2014so the client does",
+      "expected_answer": "Use FastAPI's BackgroundTasks: add a BackgroundTasks parameter to your path operation, then call background_tasks.add_task(function, *args) to schedule the function to run after the response is sent to the client.",
+      "sources": [
+        "background_tasks.md",
+        "background_tasks.md",
+        "background_tasks.md",
+        "background_tasks.md"
+      ],
+      "expected_sources": [
+        "tutorial/background-tasks.md"
+      ],
+      "faithfulness": {
+        "score": 1.0,
+        "justification": "All claims (function definition, BackgroundTasks parameter, add_task usage, code example) are directly drawn from the retrieved context with no unsupported additions."
+      },
+      "correctness": {
+        "score": 1.0,
+        "justification": "The answer correctly explains using BackgroundTasks with add_task to run the email task after returning the response, matching the expected answer's meaning."
+      },
+      "retrieval_quality": {
+        "score": 1.0,
+        "justification": "All retrieved chunks come from background_tasks.md, which corresponds to the expected source tutorial/background-tasks.md."
+      },
+      "passed": true
+    },
+    {
+      "id": "q8",
+      "question": "Can I use BackgroundTasks for very heavy computation like video processing?",
+      "category": "edge_case",
+      "generated_answer": "I don't know based on the provided context. However, the context does note that \"If you need to perform heavy background computation and you don't necessarily need it to be run by the same process (for example, you don't need to share memory, variables, etc), you might benefit from using other bigger tools like Celery\" instead.",
+      "expected_answer": "FastAPI's docs note that BackgroundTasks is suitable for small tasks that need to happen after a response (like sending a notification email), but for heavy background computation, a dedicated task queue tool like Celery is recommended instead, since BackgroundTasks runs in the same process.",
+      "sources": [
+        "background_tasks.md",
+        "background_tasks.md",
+        "background_tasks.md",
+        "background_tasks.md"
+      ],
+      "expected_sources": [
+        "tutorial/background-tasks.md"
+      ],
+      "faithfulness": {
+        "score": 0.85,
+        "justification": "The quoted caveat is directly from the retrieved context and accurately quoted. The opening 'I don't know' is a slight hedge that is unnecessary since the context actually does answer the question, but it doesn't introduce false or unsupported claims.'"
+      },
+      "correctness": {
+        "score": 0.8,
+        "justification": "The answer correctly conveys that heavy computation should use a separate tool like Celery instead of BackgroundTasks, matching the expected meaning, though the initial 'I don't know' framing undersells the fact that the context does answer the question, and it omits the nuance about BackgroundTasks running in the same process being the reason.'"
+      },
+      "retrieval_quality": {
+        "score": 1.0,
+        "justification": "All retrieved chunks come from background_tasks.md, matching the expected source tutorial/background-tasks.md, and include the relevant caveat about heavy computation."
+      },
+      "passed": true
+    },
+    {
+      "id": "q9",
+      "question": "What's the best way to add rate limiting to a FastAPI endpoint?",
+      "category": "out_of_scope",
+      "generated_answer": "I don't know based on the provided context.",
+      "expected_answer": "This is out of scope for the provided documentation \u2014 FastAPI's core docs do not include built-in rate limiting; that typically requires a third-party library not covered in this corpus.",
+      "sources": [
+        "dependencies.md",
+        "dependencies.md",
+        "query_params.md",
+        "dependencies.md"
+      ],
+      "expected_sources": [],
+      "faithfulness": {
+        "score": 1.0,
+        "justification": "The answer only states it doesn't know, which is fully grounded in the fact that the retrieved context contains no information about rate limiting; no unsupported claims are made.'},"
+      },
+      "correctness": {
+        "score": 0.6,
+        "justification": "The answer correctly conveys that the information isn't available, matching the spirit of the expected answer, but it lacks the additional helpful detail that rate limiting isn't a built-in FastAPI feature and typically requires a third-party library."
+      },
+      "retrieval_quality": {
+        "score": 1.0,
+        "justification": "The retrieved chunks (dependencies, query params) are unrelated to rate limiting, correctly reflecting that no relevant content exists in the corpus for this out_of_scope question."
+      },
+      "passed": false
+    },
+    {
+      "id": "q10",
+      "question": "How does FastAPI distinguish between a path parameter and a query parameter?",
+      "category": "multi-hop",
+      "generated_answer": "FastAPI is smart enough to notice that a parameter matching a name declared in the path (like `item_id`) is a path parameter, while other function parameters (like `q`) that are not declared in the path are treated as query parameters.",
+      "expected_answer": "Parameters that are declared as part of the path string (e.g. /items/{item_id}) are treated as path parameters. Any other function parameters that are of simple types (str, int, etc.) and not part of the path are automatically interpreted as query parameters.",
+      "sources": [
+        "query_params.md",
+        "query_params.md",
+        "query_params.md",
+        "path_params.md"
+      ],
+      "expected_sources": [
+        "tutorial/path-params.md",
+        "tutorial/query-params.md"
+      ],
+      "faithfulness": {
+        "score": 1.0,
+        "justification": "The answer directly paraphrases the retrieved context's tip that FastAPI notices item_id is a path parameter (declared in the path) and q is a query parameter (not declared in path), with no unsupported claims."
+      },
+      "correctness": {
+        "score": 0.9,
+        "justification": "Captures the core mechanism (path-declared params vs others) matching the expected answer's meaning; slightly less precise since it omits the 'simple types' nuance from the expected answer, but conveys the same essential logic."
+      },
+      "retrieval_quality": {
+        "score": 0.85,
+        "justification": "Retrieved chunks come from query_params.md and path_params.md, matching both expected source files (tutorial/path-params.md and tutorial/query-params.md), though heavily weighted toward query_params.md with only one path_params.md chunk."
+      },
+      "passed": true
+    },
+    {
+      "id": "q11",
+      "question": "How do I override a dependency during testing in FastAPI?",
+      "category": "factual",
+      "generated_answer": "I don't know based on the provided context.",
+      "expected_answer": "Use app.dependency_overrides, a dictionary on the FastAPI app instance, to map the original dependency callable to a replacement (e.g. a mock) for the duration of your tests.",
+      "sources": [
+        "dependencies.md",
+        "background_tasks.md",
+        "dependencies.md",
+        "dependencies.md"
+      ],
+      "expected_sources": [
+        "tutorial/dependencies/index.md"
+      ],
+      "faithfulness": {
+        "score": 1.0,
+        "justification": "The answer states it doesn't know, which is fully grounded since no claim is made beyond the retrieved context; no hallucination occurs.honestly correct given the retrieved chunks don't mention dependency overrides for testing.'"
+      },
+      "correctness": {
+        "score": 0.0,
+        "justification": "The expected answer explains the use of app.dependency_overrides to override dependencies during testing, but the generated answer fails to provide this information, giving no useful content to the user."
+      },
+      "retrieval_quality": {
+        "score": 0.2,
+        "justification": "The retrieved chunks are from dependencies.md and background_tasks.md, which are related to the topic of dependencies but do not include the specific section on testing overrides (tutorial/dependencies/index.md's dependency_overrides content), so coverage of the expected source is minimal."
+      },
+      "passed": false
+    },
+    {
+      "id": "q12",
+      "question": "What Python version do I need to use type hints with FastAPI?",
+      "category": "out_of_scope",
+      "generated_answer": "I don't know based on the provided context.",
+      "expected_answer": "This is out of scope for the provided documentation \u2014 while FastAPI relies heavily on Python type hints, the specific minimum Python version isn't covered in these excerpts and should be checked separately.",
+      "sources": [
+        "dependencies.md",
+        "path_params.md",
+        "dependencies.md",
+        "classes_as_dependencies.md"
+      ],
+      "expected_sources": [],
+      "faithfulness": {
+        "score": 1.0,
+        "justification": "The answer states it doesn't know, which is fully grounded\u2014no claims are made beyond what's supported by context, and no hallucination occurs."
+      },
+      "correctness": {
+        "score": 0.85,
+        "justification": "The answer correctly conveys that the information isn't available in the provided context, matching the core meaning of the expected answer, though it lacks the additional detail that type hints are still central to FastAPI and that the version should be checked elsewhere."
+      },
+      "retrieval_quality": {
+        "score": 0.6,
+        "justification": "The retrieved chunks are topically related to FastAPI and type hints but do not address the specific Python version requirement; they are not entirely irrelevant, but they also don't mislead the system into fabricating an answer, so partial credit is appropriate."
+      },
+      "passed": false
+    }
+  ]
+}

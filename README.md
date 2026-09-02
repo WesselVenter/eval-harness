@@ -76,6 +76,35 @@ wrong information trips `test_category_correctness_within_threshold` with
 the specific questions and scores that regressed, and recovers to green once
 reverted.
 
+## Findings
+
+Running the eval suite against the current corpus/dataset produced a 0%
+hallucination rate, but correctness varied sharply by category — `factual`
+questions scored lowest (~0.41), well below `multi-hop` (~0.56), `edge_case`
+(~0.80), and `versioned` (~0.95). That was surprising going in, since factual
+lookups should be the easiest case to get right.
+
+Comparing expected_source_ids against actually-retrieved chunks per question
+showed the cause wasn't wrong-file retrieval — it was **within-file chunk
+ranking**. `dependencies.md` covers several distinct sub-topics (basic
+dependency injection, sub-dependencies, and test-time overrides via
+`dependency_overrides`). On narrow questions about one specific sub-topic
+(e.g. "can a dependency depend on another dependency?"), the top-k retrieved
+chunks were correctly pulled from the right file but missed the specific
+passage needed, so the app answered "I don't know" despite the answer
+existing in the corpus. Shorter, single-topic files like
+`background_tasks.md` had no such problem and scored a perfect 1.0.
+
+This is why the regression gate (see Tests, above) uses per-category
+correctness floors instead of a single global threshold — `factual` and
+`multi-hop` are a known, explained weak spot tied to chunk granularity in
+dense source files, not an arbitrary number to chase to 1.0.
+
+**Next step, if I continue tuning:** reduce chunk size (or add overlap)
+specifically for longer source files, and re-run the eval to check whether
+`factual`/`multi-hop` correctness improves without regressing the categories
+that already score well.
+
 ## Design
 
 See `docs/superpowers/specs/2026-09-01-eval-harness-design.md` for the full
