@@ -1,0 +1,123 @@
+{
+  "summary": {
+    "mean_faithfulness": 5.0,
+    "mean_relevance": 5.0,
+    "correctness_rate": 1.0,
+    "hallucination_rate": 0.0,
+    "n_items": 7
+  },
+  "items": [
+    {
+      "id": "q1",
+      "question": "How many devices can I sync to on the Free plan?",
+      "generated_answer": "On the Free plan, you can sync to **2 devices**.",
+      "expected_answer": "2 devices.",
+      "sources": [
+        "faq.md",
+        "pricing.md",
+        "setup-guide.md",
+        "setup-guide.md"
+      ],
+      "faithfulness": 5,
+      "relevance": 5,
+      "correctness": true,
+      "reasoning": "The generated answer correctly states 2 devices for the Free plan, directly matching the expected answer and supported explicitly by both faq.md and pricing.md in the retrieved context."
+    },
+    {
+      "id": "q2",
+      "question": "Does Nimbus Notes have end-to-end encryption on the Free plan?",
+      "generated_answer": "Yes. According to faq.md, \"all notes are end-to-end encrypted by default on both Free and Pro plans.\" This is consistent with security.md, which states that all notes are encrypted end-to-end using AES-256.",
+      "expected_answer": "Yes, encryption is on by default on both Free and Pro plans.",
+      "sources": [
+        "support-policy.md",
+        "security.md",
+        "faq.md",
+        "setup-guide.md"
+      ],
+      "faithfulness": 5,
+      "relevance": 5,
+      "correctness": true,
+      "reasoning": "The answer correctly states that end-to-end encryption is enabled by default on both Free and Pro plans, directly citing faq.md and corroborating with security.md. This matches the expected answer exactly and is fully supported by the retrieved context."
+    },
+    {
+      "id": "q3",
+      "question": "How much does the Pro plan cost per year?",
+      "generated_answer": "The Pro plan costs $60/year (or $6/month).",
+      "expected_answer": "$60 per year.",
+      "sources": [
+        "support-policy.md",
+        "faq.md",
+        "pricing.md",
+        "faq.md"
+      ],
+      "faithfulness": 5,
+      "relevance": 5,
+      "correctness": true,
+      "reasoning": "The generated answer correctly states the Pro plan costs $60/year, matching the expected answer, and is directly supported by the pricing.md context which states 'Pro: $6/month or $60/year.' The additional mention of the monthly price is accurate supplementary information and does not detract from correctness."
+    },
+    {
+      "id": "q4",
+      "question": "Can I get phone support as a Pro user?",
+      "generated_answer": "No. According to the support policy, Nimbus Notes does not offer phone support on any plan, including Pro. Pro plan users get email support with a target first-response time of 24 hours on business days.",
+      "expected_answer": "No, Nimbus Notes does not offer phone support on any plan.",
+      "sources": [
+        "support-policy.md",
+        "faq.md",
+        "pricing.md",
+        "faq.md"
+      ],
+      "faithfulness": 5,
+      "relevance": 5,
+      "correctness": true,
+      "reasoning": "The generated answer directly and correctly answers the question, matching the expected answer, and adds accurate supporting detail (email support with 24-hour response time for Pro) drawn directly from the retrieved support-policy.md context. No unsupported claims are made."
+    },
+    {
+      "id": "q5",
+      "question": "What happens if I forget my password?",
+      "generated_answer": "If you forget your password, your notes cannot be recovered, since Nimbus Notes has no access to your encryption key. It's strongly recommended to save a backup of your recovery phrase, which is shown once during account creation.",
+      "expected_answer": "Notes cannot be recovered because Nimbus Notes has no access to your encryption key; you should use your recovery phrase.",
+      "sources": [
+        "security.md",
+        "faq.md",
+        "setup-guide.md",
+        "pricing.md"
+      ],
+      "faithfulness": 5,
+      "relevance": 5,
+      "correctness": true,
+      "reasoning": "The generated answer directly matches the content in security.md, correctly stating that notes cannot be recovered due to lack of encryption key access, and recommending the recovery phrase backup. This aligns fully with the expected answer and is fully supported by the retrieved context."
+    },
+    {
+      "id": "q6",
+      "question": "Can I use Nimbus Notes without an internet connection?",
+      "generated_answer": "Yes. Notes you've already opened are cached locally and fully editable offline. Changes sync automatically the next time you're online.",
+      "expected_answer": "Yes, previously opened notes are cached locally and editable offline, syncing once back online.",
+      "sources": [
+        "faq.md",
+        "setup-guide.md",
+        "setup-guide.md",
+        "security.md"
+      ],
+      "faithfulness": 5,
+      "relevance": 5,
+      "correctness": true,
+      "reasoning": "The generated answer directly quotes the faq.md content, which matches the expected answer's meaning exactly: previously opened notes are cached locally, editable offline, and sync once back online. Fully supported by retrieved context and directly answers the question."
+    },
+    {
+      "id": "q7",
+      "question": "What is the maximum weight capacity of a Nimbus Notes desk?",
+      "generated_answer": "I don't know based on the provided context.",
+      "expected_answer": "I don't know based on the provided context \u2014 Nimbus Notes is a note-taking app and the corpus contains no information about desks.",
+      "sources": [
+        "setup-guide.md",
+        "faq.md",
+        "security.md",
+        "pricing.md"
+      ],
+      "faithfulness": 5,
+      "relevance": 5,
+      "correctness": true,
+      "reasoning": "The question is nonsensical/irrelevant to the corpus, which is about a note-taking app, not physical desks. The generated answer correctly declines to answer, matching the expected response in substance, and is fully supported by the retrieved context (which contains no desk information)."
+    }
+  ]
+}
