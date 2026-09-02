@@ -48,15 +48,33 @@ uv run pytest tests/ -v
 ```
 
 `tests/test_regression.py` runs a full eval pass against the real Anthropic
-API and asserts the summary clears the thresholds in `eval/metrics.py`. It
-skips automatically if `ANTHROPIC_API_KEY` is not set. All other tests mock
-the Anthropic client and don't require a key.
+API and gates on two thresholds, calibrated from real eval runs against the
+current corpus/dataset rather than picked arbitrarily:
+
+- **Hallucination rate ≤ 15%** overall (observed baseline: 0%).
+- **Per-category correctness floors**, set ~0.15-0.2 below each category's
+  observed baseline (see the comment in `tests/test_regression.py` for the
+  full table). A flat 0.7 floor across categories was tried first and
+  rejected — it failed on every run because `factual`/`multi-hop` retrieval
+  is a known weak spot, not a regression, so a single global number wasn't a
+  useful gate.
+
+On failure, the test prints exactly which question(s) and metric tripped the
+threshold (id, score, question text), not just "test failed". It skips
+automatically if `ANTHROPIC_API_KEY` is not set. All other tests mock the
+Anthropic client and don't require a key.
 
 ## CI
 
 `.github/workflows/eval-ci.yml` runs on every push/PR: installs `uv`, syncs
-deps, ingests the corpus, and runs the full test suite (including the
-regression gate) using an `ANTHROPIC_API_KEY` repository secret.
+deps, ingests the corpus, verifies the `ANTHROPIC_API_KEY` repository secret
+is set (fails fast with a clear error if it's missing), and runs the full
+test suite including the regression gate.
+
+The gate has been verified to fail loudly: corrupting a corpus file with
+wrong information trips `test_category_correctness_within_threshold` with
+the specific questions and scores that regressed, and recovers to green once
+reverted.
 
 ## Design
 
